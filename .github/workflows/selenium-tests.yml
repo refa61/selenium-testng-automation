@@ -33,6 +33,12 @@ jobs:
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
 
+      - name: Start Xvfb (Virtual Display)
+        run: Xvfb :99 -ac -screen 0 1920x1080x24 &
+
+      - name: Set display environment variable
+        run: echo "DISPLAY=:99" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: mvn clean install
 
