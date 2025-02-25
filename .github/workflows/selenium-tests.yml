@@ -20,14 +20,14 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Firefox
+      - name: Install Firefox and dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y firefox
+          sudo apt-get install -y firefox xvfb
 
-      - name: Set up GeckoDriver
+      - name: Set up GeckoDriver (Fast version)
         run: |
-          GECKODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "tag_name" | cut -d '"' -f 4)
+          GECKODRIVER_VERSION="v0.33.0"
           wget "https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz"
           tar -xzf geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
           chmod +x geckodriver
@@ -35,7 +35,7 @@ jobs:
 
       - name: Start Xvfb (Virtual Display)
         run: Xvfb :99 -ac -screen 0 1920x1080x24 &
-
+      
       - name: Set display environment variable
         run: echo "DISPLAY=:99" >> $GITHUB_ENV
 
