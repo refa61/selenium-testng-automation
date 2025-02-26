@@ -20,26 +20,34 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Firefox and dependencies
+      - name: Install specific Firefox version
         run: |
           sudo apt-get update
-          sudo apt-get install -y firefox xvfb
+          sudo apt-get install -y firefox=115.0+build1-0ubuntu0.20.04.1
 
-      - name: Set up GeckoDriver (Stable Version)
+      - name: Install GeckoDriver
         run: |
-          GECKODRIVER_VERSION="v0.33.0"
-          wget "https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz"
-          tar -xzf geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
+          wget -q "https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz"
+          tar -xzf geckodriver-v0.33.0-linux64.tar.gz
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
+
+      - name: Debug GeckoDriver
+        run: |
+          which geckodriver
+          geckodriver --version
 
       - name: Start Xvfb (Virtual Display)
         run: |
           Xvfb :99 -ac -screen 0 1920x1080x24 &
+          sleep 10
           echo "DISPLAY=:99" >> $GITHUB_ENV
 
+      - name: Test Firefox launch
+        run: firefox --headless --version
+
       - name: Install dependencies
-        run: mvn clean install
+        run: mvn clean verify
 
       - name: Run Selenium Tests
-        run: mvn test
+        run: mvn -X test
