@@ -25,9 +25,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y firefox xvfb
 
-      - name: Set up stable GeckoDriver
+      - name: Set up GeckoDriver (Stable Version)
         run: |
-          GECKODRIVER_VERSION="v0.33.0"  # Stabil version
+          GECKODRIVER_VERSION="v0.33.0"
           wget "https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz"
           tar -xzf geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
           chmod +x geckodriver
