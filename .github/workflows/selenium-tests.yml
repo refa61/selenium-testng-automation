@@ -25,19 +25,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y firefox xvfb
 
-      - name: Set up GeckoDriver (Fast version)
+      - name: Set up stable GeckoDriver
         run: |
-          GECKODRIVER_VERSION="v0.33.0"
+          GECKODRIVER_VERSION="v0.33.0"  # Stabil version
           wget "https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz"
           tar -xzf geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
 
       - name: Start Xvfb (Virtual Display)
-        run: Xvfb :99 -ac -screen 0 1920x1080x24 &
-      
-      - name: Set display environment variable
-        run: echo "DISPLAY=:99" >> $GITHUB_ENV
+        run: |
+          Xvfb :99 -ac -screen 0 1920x1080x24 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: mvn clean install
